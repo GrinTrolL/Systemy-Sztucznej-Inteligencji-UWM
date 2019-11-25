@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Odczyt_Probek"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="627.731" Width="719.327">
     <Grid>
-        
+        <Button x:Name="AddDescriptionButton" Content="Wybierz plik z opisem" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="357" Height="59" Click="AddDescriptionButton_Click"/>
+        <Button x:Name="AddValuesButton" Content="Wybierz plik z wartościami" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Width="357" Height="59" Click="AddValuesButton_Click"/>
+        <Button x:Name="LoadDataButton" Content="Wczytaj dane" HorizontalAlignment="Left" Margin="372,10,0,0" VerticalAlignment="Top" Width="329" Height="123" IsEnabled="False" Click="LoadDataButton_Click"/>
+        <DataGrid x:Name="LoadedDataGrid" Height="449" Margin="10,138,0,0" VerticalAlignment="Top" Width="691"   HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ColumnWidth="*" />
+
     </Grid>
 </Window>

@@ -94,5 +94,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LoadFileMethods\LoadFileMethods.csproj">
+      <Project>{1234ECB6-8610-418C-837E-508C49E64FF5}</Project>
+      <Name>LoadFileMethods</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
