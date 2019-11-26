@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoadFileMethods;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,15 @@ namespace Wykresy
 {
     public partial class Form1 : Form
     {
+        private string _descriptionFile = string.Empty;
+        private string _valuesFile = string.Empty;
+
+        private List<List<string>> values;
+
+        private List<bool> areSymbols;
+
+        private List<string> names;
+
         public Form1()
         {
             InitializeComponent();
@@ -26,7 +36,6 @@ namespace Wykresy
             NarysujSinus();
 
             NarysujGlowe();
-
         }
 
         private void NarysujPunkty()
@@ -70,6 +79,73 @@ namespace Wykresy
             }
 
             wykres_linie_rysuj(xPoints, yPoints);
+        }
+
+        private void IrysDescriptionButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                _descriptionFile = openFileDialog.FileName;
+            }
+
+            CheckIfFilesChosen();
+        }
+
+        private void IrysDataButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                _valuesFile = openFileDialog.FileName;
+            }
+
+            CheckIfFilesChosen();
+        }
+
+        private void CheckIfFilesChosen()
+        {
+            if (!string.IsNullOrWhiteSpace(_descriptionFile) && !string.IsNullOrWhiteSpace(_valuesFile))
+            {
+                IrysLoadButton.Enabled = true;
+            }
+        }
+
+        private void CleanProgram()
+        {
+            _descriptionFile = string.Empty;
+            _valuesFile = string.Empty;
+            IrysLoadButton.Enabled = false;
+        }
+
+        private void IrysLoadButton_Click(object sender, EventArgs e)
+        {
+            wykres_czysc();
+
+            try
+            {
+                FileExtensionMethods.wczytaj_baze_probek_z_tekstem(_valuesFile, _descriptionFile, out values, out areSymbols, out names);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+                CleanProgram();
+
+                return;
+            }
+
+            values.ForEach(row =>
+            {
+                for (int i = 0; i < row.Count; i++)
+                {
+                    if (areSymbols[i])
+                    {
+                        row[i] = $"\"{row[i]}\"";
+                    }
+                }
+            });
         }
     }
 }

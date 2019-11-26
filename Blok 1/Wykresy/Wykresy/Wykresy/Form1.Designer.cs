@@ -12,15 +12,6 @@ namespace Wykresy
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        private string _descriptionFile = string.Empty;
-        private string _valuesFile = string.Empty;
-
-        private List<List<string>> values;
-
-        private List<bool> areSymbols;
-
-        private List<string> names;
-
         private List<SeriesProperties> seriesStyles = new List<SeriesProperties>()
         {
             new SeriesProperties
@@ -187,9 +178,9 @@ namespace Wykresy
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.MainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.SmileButton = new System.Windows.Forms.Button();
-            this.IrysButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.IrysDescriptionButton = new System.Windows.Forms.Button();
+            this.IrysDataButton = new System.Windows.Forms.Button();
+            this.IrysLoadButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MainChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -219,41 +210,45 @@ namespace Wykresy
             this.SmileButton.UseVisualStyleBackColor = true;
             this.SmileButton.Click += new System.EventHandler(this.SmileButton_Click);
             // 
-            // IrysButton
+            // IrysDescriptionButton
             // 
-            this.IrysButton.Location = new System.Drawing.Point(387, 13);
-            this.IrysButton.Name = "IrysButton";
-            this.IrysButton.Size = new System.Drawing.Size(211, 35);
-            this.IrysButton.TabIndex = 2;
-            this.IrysButton.Text = "button2";
-            this.IrysButton.UseVisualStyleBackColor = true;
+            this.IrysDescriptionButton.Location = new System.Drawing.Point(387, 13);
+            this.IrysDescriptionButton.Name = "IrysDescriptionButton";
+            this.IrysDescriptionButton.Size = new System.Drawing.Size(211, 35);
+            this.IrysDescriptionButton.TabIndex = 2;
+            this.IrysDescriptionButton.Text = "Wybierz opis Irysa";
+            this.IrysDescriptionButton.UseVisualStyleBackColor = true;
+            this.IrysDescriptionButton.Click += new System.EventHandler(this.IrysDescriptionButton_Click);
             // 
-            // button1
+            // IrysDataButton
             // 
-            this.button1.Location = new System.Drawing.Point(604, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(184, 35);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.IrysDataButton.Location = new System.Drawing.Point(604, 13);
+            this.IrysDataButton.Name = "IrysDataButton";
+            this.IrysDataButton.Size = new System.Drawing.Size(184, 35);
+            this.IrysDataButton.TabIndex = 3;
+            this.IrysDataButton.Text = "Wybierz dane Irysa";
+            this.IrysDataButton.UseVisualStyleBackColor = true;
+            this.IrysDataButton.Click += new System.EventHandler(this.IrysDataButton_Click);
             // 
-            // button2
+            // IrysLoadButton
             // 
-            this.button2.Location = new System.Drawing.Point(387, 55);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(401, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.IrysLoadButton.Enabled = false;
+            this.IrysLoadButton.Location = new System.Drawing.Point(387, 55);
+            this.IrysLoadButton.Name = "IrysLoadButton";
+            this.IrysLoadButton.Size = new System.Drawing.Size(401, 23);
+            this.IrysLoadButton.TabIndex = 4;
+            this.IrysLoadButton.Text = "Wczytaj dane Irysa";
+            this.IrysLoadButton.UseVisualStyleBackColor = true;
+            this.IrysLoadButton.Click += new System.EventHandler(this.IrysLoadButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.IrysButton);
+            this.Controls.Add(this.IrysLoadButton);
+            this.Controls.Add(this.IrysDataButton);
+            this.Controls.Add(this.IrysDescriptionButton);
             this.Controls.Add(this.SmileButton);
             this.Controls.Add(this.MainChart);
             this.Name = "Form1";
@@ -267,9 +262,9 @@ namespace Wykresy
 
         private System.Windows.Forms.DataVisualization.Charting.Chart MainChart;
         private System.Windows.Forms.Button SmileButton;
-        private System.Windows.Forms.Button IrysButton;
-        private Button button1;
-        private Button button2;
+        private System.Windows.Forms.Button IrysDescriptionButton;
+        private Button IrysDataButton;
+        private Button IrysLoadButton;
     }
 }
 
