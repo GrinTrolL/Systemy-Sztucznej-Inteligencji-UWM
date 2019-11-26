@@ -91,6 +91,7 @@ namespace Wykresy
         void wykres_czysc()
         {
             MainChart.Series.Clear();
+            MainChart.ChartAreas.Clear();
         }
         void wykres_linie_rysuj(List<double> wartosci_y)
         {
@@ -147,7 +148,7 @@ namespace Wykresy
 
         void StyleSeries(Series series, int seriesNumber)
         {
-            var style = seriesStyles[seriesNumber];
+            var style = seriesStyles[seriesNumber%10];
 
             series.Color = style.Color;
             series.MarkerStyle = style.MarkerStyle;
@@ -196,7 +197,7 @@ namespace Wykresy
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.MainChart.Series.Add(series1);
-            this.MainChart.Size = new System.Drawing.Size(776, 355);
+            this.MainChart.Size = new System.Drawing.Size(1130, 539);
             this.MainChart.TabIndex = 0;
             this.MainChart.Text = "chart1";
             // 
@@ -212,7 +213,7 @@ namespace Wykresy
             // 
             // IrysDescriptionButton
             // 
-            this.IrysDescriptionButton.Location = new System.Drawing.Point(387, 13);
+            this.IrysDescriptionButton.Location = new System.Drawing.Point(741, 13);
             this.IrysDescriptionButton.Name = "IrysDescriptionButton";
             this.IrysDescriptionButton.Size = new System.Drawing.Size(211, 35);
             this.IrysDescriptionButton.TabIndex = 2;
@@ -222,7 +223,7 @@ namespace Wykresy
             // 
             // IrysDataButton
             // 
-            this.IrysDataButton.Location = new System.Drawing.Point(604, 13);
+            this.IrysDataButton.Location = new System.Drawing.Point(958, 13);
             this.IrysDataButton.Name = "IrysDataButton";
             this.IrysDataButton.Size = new System.Drawing.Size(184, 35);
             this.IrysDataButton.TabIndex = 3;
@@ -233,7 +234,7 @@ namespace Wykresy
             // IrysLoadButton
             // 
             this.IrysLoadButton.Enabled = false;
-            this.IrysLoadButton.Location = new System.Drawing.Point(387, 55);
+            this.IrysLoadButton.Location = new System.Drawing.Point(741, 54);
             this.IrysLoadButton.Name = "IrysLoadButton";
             this.IrysLoadButton.Size = new System.Drawing.Size(401, 23);
             this.IrysLoadButton.TabIndex = 4;
@@ -245,7 +246,7 @@ namespace Wykresy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1154, 634);
             this.Controls.Add(this.IrysLoadButton);
             this.Controls.Add(this.IrysDataButton);
             this.Controls.Add(this.IrysDescriptionButton);
