@@ -132,25 +132,25 @@ namespace Wykresy
             MainChart.ChartAreas.Add(new ChartArea()
             {
                 Name = "TopLeft",
-                Position = new ElementPosition(0, 0, 50, 50)
+                Position = new ElementPosition(0, 0, 45, 50)
 
             });
             MainChart.ChartAreas.Add(new ChartArea()
             {
                 Name = "TopRight",
-                Position = new ElementPosition(50, 0, 50, 50)
+                Position = new ElementPosition(45, 0, 45, 50)
 
             });
             MainChart.ChartAreas.Add(new ChartArea()
             {
                 Name = "BottomLeft",
-                Position = new ElementPosition(50, 0, 50, 50)
+                Position = new ElementPosition(0, 50, 45, 50)
 
             });
             MainChart.ChartAreas.Add(new ChartArea()
             {
                 Name = "BottomRight",
-                Position = new ElementPosition(50, 50, 50, 50)
+                Position = new ElementPosition(45, 50, 45, 50)
 
             });
 
