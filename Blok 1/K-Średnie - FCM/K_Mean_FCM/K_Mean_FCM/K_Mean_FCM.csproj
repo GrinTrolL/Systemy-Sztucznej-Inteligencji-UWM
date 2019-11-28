@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5764E0E7-C505-4B42-94F6-EF5B672CFFAD}</ProjectGuid>
+    <ProjectGuid>{E2A32BA8-6F3E-4AD1-8C17-DD934C4D8389}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Wykresy</RootNamespace>
-    <AssemblyName>Wykresy</AssemblyName>
+    <RootNamespace>K_Mean_FCM</RootNamespace>
+    <AssemblyName>K_Mean_FCM</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,8 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ChartExtensionMethods">
+      <HintPath>..\..\..\Wykresy\Wykresy\ChartExtensionMethods\bin\Release\ChartExtensionMethods.dll</HintPath>
+    </Reference>
     <Reference Include="LoadFileMethods">
-      <HintPath>..\..\..\Odczyt próbek\Odczyt_Probek\Odczyt_Probek\bin\Release\LoadFileMethods.dll</HintPath>
+      <HintPath>..\..\..\Odczyt próbek\Odczyt_Probek\LoadFileMethods\bin\Release\LoadFileMethods.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -82,12 +85,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ChartExtensionMethods\DrawChartExtensionMethods.csproj">
-      <Project>{827D9365-F5AB-47FF-837B-876736AAF1FE}</Project>
-      <Name>DrawChartExtensionMethods</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
