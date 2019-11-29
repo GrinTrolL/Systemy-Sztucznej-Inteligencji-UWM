@@ -39,6 +39,7 @@
             this.LoadSpiralDataButton = new System.Windows.Forms.Button();
             this.IterationCount = new System.Windows.Forms.TextBox();
             this.GroupsCount = new System.Windows.Forms.TextBox();
+            this.FuzzyValue = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.MainChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -123,15 +124,24 @@
             // 
             this.GroupsCount.Location = new System.Drawing.Point(794, 41);
             this.GroupsCount.Name = "GroupsCount";
-            this.GroupsCount.Size = new System.Drawing.Size(100, 20);
+            this.GroupsCount.Size = new System.Drawing.Size(119, 20);
             this.GroupsCount.TabIndex = 8;
             this.GroupsCount.Text = "Ilość grup";
+            // 
+            // FuzzyValue
+            // 
+            this.FuzzyValue.Location = new System.Drawing.Point(796, 70);
+            this.FuzzyValue.Name = "FuzzyValue";
+            this.FuzzyValue.Size = new System.Drawing.Size(117, 20);
+            this.FuzzyValue.TabIndex = 9;
+            this.FuzzyValue.Text = "Stopień rozmycia";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 450);
+            this.Controls.Add(this.FuzzyValue);
             this.Controls.Add(this.GroupsCount);
             this.Controls.Add(this.IterationCount);
             this.Controls.Add(this.LoadSpiralDataButton);
@@ -158,6 +168,7 @@
         private System.Windows.Forms.Button LoadSpiralDataButton;
         private System.Windows.Forms.TextBox IterationCount;
         private System.Windows.Forms.TextBox GroupsCount;
+        private System.Windows.Forms.TextBox FuzzyValue;
     }
 }
 

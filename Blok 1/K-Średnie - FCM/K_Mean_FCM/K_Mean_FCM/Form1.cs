@@ -53,7 +53,6 @@ namespace K_Mean_FCM
             if (!string.IsNullOrWhiteSpace(_descriptionFile) && !string.IsNullOrWhiteSpace(_valuesFile))
             {
                 KMeanButton.Enabled = true;
-                KMedoidButton.Enabled = true;
                 FCMButton.Enabled = true;
             }
         }
@@ -198,11 +197,11 @@ namespace K_Mean_FCM
                         if (minimalDestinationGroupIndex == -1)
                         {
                             minimalDestinationGroupIndex = 0;
-                            minimalDistance = CountDistanceOfPoints(point, groupCenters[j]);
+                            minimalDistance = CountEuclideanDistanceOfPoints(point, groupCenters[j]);
                             continue;
                         }
 
-                        var distanceNow = CountDistanceOfPoints(point, groupCenters[j]);
+                        var distanceNow = CountEuclideanDistanceOfPoints(point, groupCenters[j]);
 
                         if (distanceNow < minimalDistance)
                         {
@@ -263,16 +262,189 @@ namespace K_Mean_FCM
 
             foreach (var groupCenter in groupCenters)
             {
-                wykres_punkty_rysuj(new List<double>() { groupCenter.X }, new List<double>(){ groupCenter.Y});
+                wykres_punkty_rysuj(new List<double>() { groupCenter.X }, new List<double>() { groupCenter.Y });
             }
 
         }
 
         private void FCMButton_Click(object sender, EventArgs e)
         {
+            if (!int.TryParse(GroupsCount.Text, out int groupsCount))
+            {
+                MessageBox.Show("Niepoprawna liczba grup!");
+                return;
+            }
+            else
+            {
+                if (groupsCount < 1)
+                {
+                    MessageBox.Show("Niepoprawna liczba iteracji!");
+                    return;
+                }
+            }
+
+            if (!int.TryParse(IterationCount.Text, out int iterationsCount))
+            {
+                MessageBox.Show("Niepoprawna liczba iteracji!");
+                return;
+            }
+            else
+            {
+                if (iterationsCount < 1)
+                {
+                    MessageBox.Show("Niepoprawna liczba iteracji!");
+                    return;
+                }
+            }
+
+            if (!double.TryParse(FuzzyValue.Text, out double fuzziness))
+            {
+                MessageBox.Show("Niepoprawny stopień rozmycia!");
+                return;
+            }
+            else
+            {
+                if (fuzziness < 1)
+                {
+                    MessageBox.Show("Niepoprawny stopień rozmycia!");
+                    return;
+                }
+            }
+
+            wykres_czysc();
+
             FileExtensionMethods.wczytaj_baze_probek_z_tekstem(_valuesFile, _descriptionFile, out List<List<string>> values, out List<bool> areSymbols, out List<string> names);
 
+            MainChart.ChartAreas.Add("chart");
 
+            var numery_atr = new List<int>();
+
+            probki_str_na_liczby(values, numery_atr, out List<List<double>> probki_num);
+
+            var points = new List<DoublePoint>();
+
+            for (int i = 0; i < probki_num[0].Count; i++)
+            {
+                var point = new DoublePoint()
+                {
+                    X = probki_num[0][i],
+                    Y = probki_num[1][i]
+                };
+
+                points.Add(point);
+            }
+
+            List<DoublePoint> groupCenters = new List<DoublePoint>();
+
+            var rand = new Random();
+
+            for (int i = 0; i < groupsCount; i++)
+            {
+                var centerPoint = points[rand.Next(0, points.Count - 1)];
+                if (groupCenters.Any(dp => dp.X == centerPoint.X && dp.Y == centerPoint.Y))
+                {
+                    i--;
+                    continue;
+                }
+
+                groupCenters.Add(centerPoint);
+            }
+
+            for (int i = 0; i < iterationsCount; i++)
+            {
+                foreach (var point in points)
+                {
+                    List<double> destinations = new List<double>();
+
+                    for (int j = 0; j < groupCenters.Count; j++)
+                    {
+                        destinations.Add(CountEuclideanDistanceOfPoints(point, groupCenters[j]));
+                    }
+
+                    double sumOfAffiliation = 0;
+
+                    foreach (var destination in destinations)
+                    {
+                        if (destination != 0)
+                        {
+                            sumOfAffiliation += Math.Pow(destination, 1 - fuzziness);
+                        }
+                    }
+
+                    foreach (var destination in destinations)
+                    {
+                        if (destination == 0)
+                        {
+                            point.Affiliation.Add(0);
+                        }
+                        else
+                        {
+                            point.Affiliation.Add(Math.Pow(destination, 1 - fuzziness) / sumOfAffiliation);
+                        }
+                    }
+                }
+
+                List<DoublePoint> newGroupCenters = new List<DoublePoint>();
+
+                for (int j = 0; j < groupCenters.Count; j++)
+                {
+                    double affiliationSum = 0;
+
+                    foreach (var point in points)
+                    {
+                        affiliationSum += Math.Round(Math.Pow(point.Affiliation[j],fuzziness),9);
+                    }
+
+                    double newCenterX = 0;
+
+                    foreach (var point in points)
+                    {
+                        newCenterX += Math.Round(point.X * Math.Pow(point.Affiliation[j], fuzziness),9);
+                    }
+
+                    newCenterX = newCenterX / affiliationSum;
+
+                    double newCenterY = 0;
+
+                    foreach (var point in points)
+                    {
+                        newCenterY += Math.Round(point.Y * Math.Pow(point.Affiliation[j], fuzziness),9);
+                    }
+
+                    newCenterY = newCenterY / affiliationSum;
+
+                    var newCenterPoint = new DoublePoint()
+                    {
+                        X = newCenterX,
+                        Y = newCenterY
+                    };
+
+                    newGroupCenters.Add(newCenterPoint);
+                }
+
+                if (i == iterationsCount - 1)
+                {
+                    break;
+                }
+
+                groupCenters = newGroupCenters;
+            }
+
+            List<double> xGroup = new List<double>();
+            List<double> yGroup = new List<double>();
+
+            foreach (var point in points)
+            {
+                xGroup.Add(point.X);
+                yGroup.Add(point.Y);
+            }
+
+            wykres_punkty_rysuj(xGroup, yGroup);
+
+            foreach (var groupCenter in groupCenters)
+            {
+                wykres_punkty_rysuj(new List<double>() { groupCenter.X }, new List<double>() { groupCenter.Y });
+            }
         }
 
         private void KMedoidButton_Click(object sender, EventArgs e)
@@ -281,6 +453,7 @@ namespace K_Mean_FCM
 
 
         }
+
         void probki_str_na_liczby(List<List<string>> probki_str, List<int> numery_atr, out List<List<double>> probki_num)
         {
             foreach (var row in probki_str)
@@ -338,14 +511,9 @@ namespace K_Mean_FCM
             }
         }
 
-        private double CountDistanceOfPoints(DoublePoint one, DoublePoint two)
+        private double CountEuclideanDistanceOfPoints(DoublePoint one, DoublePoint two)
         {
             var distance = Math.Sqrt((one.X - two.X) * (one.X - two.X) + (one.Y - two.Y) * (one.Y - two.Y));
-
-            if (distance == 0)
-            {
-                int i = 0;
-            }
 
             return distance;
         }
@@ -354,6 +522,12 @@ namespace K_Mean_FCM
         {
             public double X { get; set; }
             public double Y { get; set; }
+            public List<double> Affiliation { get; set; }
+
+            public DoublePoint()
+            {
+                Affiliation = new List<double>();
+            }
         }
     }
 }
