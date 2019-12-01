@@ -341,6 +341,196 @@ namespace EvolutionStrategies
             MainChart.ChartAreas[0].AxisY.Maximum = maxNumber;
         }
 
+        private void PSOCount_Click(object sender, EventArgs e)
+        {
+            wykres_czysc();
+
+            ConsoleLog.Text = string.Empty;
+
+            if (!double.TryParse(MinNumber.Text, out double minNumber))
+            {
+                MessageBox.Show("Niepoprawna liczba minimalna z przedziału.");
+                return;
+            }
+
+            if (!double.TryParse(MaxNumber.Text, out double maxNumber))
+            {
+                MessageBox.Show("Niepoprawna liczba maksymalna z przedziału.");
+                return;
+            }
+
+            if (minNumber > maxNumber)
+            {
+                MessageBox.Show("Niepoprawny przedział.");
+                return;
+            }
+
+            if (!int.TryParse(IterationCount.Text, out int iterationCount))
+            {
+                MessageBox.Show("Niepoprawna liczba iteracji!");
+                return;
+            }
+
+            if (iterationCount < 4)
+            {
+                MessageBox.Show("Niepoprawna liczba iteracji!");
+                return;
+            }
+
+            if (!double.TryParse(InertiaValue.Text, out double inertiaValue))
+            {
+                MessageBox.Show("Niepoprawna wartość inercji.");
+                return;
+            }
+
+            if (inertiaValue <= 0 || inertiaValue >= 1)
+            {
+                MessageBox.Show("Niepoprawna wartość inercji.");
+                return;
+            }
+
+            if (!double.TryParse(GlobalPull.Text, out double globalPull))
+            {
+                MessageBox.Show("Niepoprawna wartość przyciągania globalnego.");
+                return;
+            }
+
+            if (globalPull <= 0 || globalPull >= 1)
+            {
+                MessageBox.Show("Niepoprawna wartość przyciągania globalnego.");
+                return;
+            }
+
+            if (!double.TryParse(LocalPull.Text, out double localPull))
+            {
+                MessageBox.Show("Niepoprawna wartość przyciągania lokalnego.");
+                return;
+            }
+
+            if (localPull <= 0 || localPull >= 1)
+            {
+                MessageBox.Show("Niepoprawna wartość przyciągania lokalnego.");
+                return;
+            }
+
+            if (!int.TryParse(NumberOfPeople.Text, out int numberOfPeople))
+            {
+                MessageBox.Show("Niepoprawna liczba osobników.");
+                return;
+            }
+
+            if (numberOfPeople <= 1)
+            {
+                MessageBox.Show("Niepoprawna liczba osobników.");
+                return;
+            }
+
+            MainChart.ChartAreas.Add("chart");
+
+            List<DoublePoint> population = new List<DoublePoint>();
+
+            List<List<double>> populationsPulls = new List<List<double>>();
+
+            DoublePoint globalBest;
+
+            var seed = new Random();
+
+            for (int i = 0; i < numberOfPeople; i++)
+            {
+                var x = GetRandomDecimalFromScale(minNumber, maxNumber, seed);
+                var y = GetRandomDecimalFromScale(minNumber, maxNumber, seed);
+
+                var point = new DoublePoint(x, y);
+
+                point.SetLocalOptimum(x, y);
+
+                population.Add(point);
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                var iAttributePulls = new List<double>();
+
+                foreach (var member in population)
+                {
+                    iAttributePulls.Add(0);
+                }
+
+                populationsPulls.Add(iAttributePulls);
+            }
+
+            for (int i = 0; i < iterationCount; i++)
+            {
+                List<double> newFValues = new List<double>();
+
+                foreach (var member in population)
+                {
+                    newFValues.Add(member.GetF());
+                }
+
+                var maxIndex = -1;
+                var maxFValue = double.MinValue;
+
+                for (int j = 0; j < newFValues.Count; j++)
+                {
+                    if (newFValues[j] > maxFValue)
+                    {
+                        maxIndex = j;
+                        maxFValue = newFValues[j];
+                    }
+                }
+
+                globalBest = population[maxIndex];
+
+                for (int j = 0; j < newFValues.Count; j++)
+                {
+                    population[j].SetFIfBetter(newFValues[j]);
+                }
+
+                var newPopulationPulls = new List<List<double>>();
+
+                for (int k = 0; k < 2; k++)
+                {
+                    var newIAttributePulls = new List<double>();
+
+                    for (int j = 0; j < population.Count; j++)
+                    {
+                        var rndGlob = seed.NextDouble();
+                        var rndLocal = seed.NextDouble();
+
+
+                        var newPullValue = populationsPulls[k][j] * inertiaValue +
+                                              (globalBest.GetAttribute(k) - population[j].GetAttribute(k)) * globalPull * rndGlob +
+                                              (population[j].GetBestAttribute(k) - population[j].GetAttribute(k)) * localPull * rndLocal;
+
+                        population[j].SetAttribute(k, population[j].GetAttribute(k) + newPullValue);
+
+                        newIAttributePulls.Add(newPullValue);
+                    }
+
+                    newPopulationPulls.Add(newIAttributePulls);
+                }
+
+                populationsPulls = newPopulationPulls;
+            }
+
+            MainChart.ChartAreas[0].AxisX.Minimum = minNumber;
+            MainChart.ChartAreas[0].AxisX.Maximum = maxNumber;
+            MainChart.ChartAreas[0].AxisY.Minimum = minNumber;
+            MainChart.ChartAreas[0].AxisY.Maximum = maxNumber;
+
+            List<double> xs = new List<double>();
+            List<double> ys = new List<double>();
+
+            foreach (var point in population)
+            {
+                xs.Add(Math.Round(point.X, 2));
+                ys.Add(Math.Round(point.Y, 2));
+            }
+
+            wykres_punkty_rysuj(xs, ys);
+        }
+
         private double GetRandomDecimalFromScale(double min, double max, Random seed)
         {
 
@@ -430,6 +620,8 @@ namespace EvolutionStrategies
             public double X { get; set; }
             public double Y { get; set; }
             public double FunctionValue { get; set; }
+            public double BestX { get; set; }
+            public double BestY { get; set; }
 
             public DoublePoint(double x, double y)
             {
@@ -442,10 +634,68 @@ namespace EvolutionStrategies
                 FunctionValue = Math.Sin(X * 0.05) + Math.Sin(Y * 0.05) + 0.4 * Math.Sin(X * 0.15) * Math.Sin(Y * 0.15);
             }
 
+            public double GetF()
+            {
+                return Math.Sin(X * 0.05) + Math.Sin(Y * 0.05) + 0.4 * Math.Sin(X * 0.15) * Math.Sin(Y * 0.15);
+            }
+
+            public void SetFIfBetter(double newF)
+            {
+                if (newF > FunctionValue)
+                {
+                    BestX = X;
+                    BestY = Y;
+                    FunctionValue = newF;
+                }
+            }
+
             public void Mutate(double mutationLevelX, double mutationLevelY)
             {
                 X += mutationLevelX;
                 Y += mutationLevelY;
+            }
+
+            public void SetLocalOptimum(double x, double y)
+            {
+                BestX = x;
+                BestY = y;
+            }
+
+            public double GetAttribute(int i)
+            {
+                if (i == 0)
+                {
+                    return X;
+                }
+                else
+                {
+                    return Y;
+                }
+            }
+
+            public double GetBestAttribute(int i)
+            {
+                if (i == 0)
+                {
+                    return BestX;
+                }
+                else
+                {
+                    return BestY;
+                }
+            }
+
+
+            public void SetAttribute(int i, double value)
+            {
+                if (i == 0)
+                {
+                    X = value;
+                }
+                else
+                {
+                    Y = value;
+                }
             }
         }
     }
