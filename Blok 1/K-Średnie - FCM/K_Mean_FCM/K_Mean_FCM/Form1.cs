@@ -265,6 +265,11 @@ namespace K_Mean_FCM
                 wykres_punkty_rysuj(new List<double>() { groupCenter.X }, new List<double>() { groupCenter.Y });
             }
 
+            for (int i = MainChart.Series.Count / 2; i < MainChart.Series.Count; i++)
+            {
+                MainChart.Series[i].MarkerSize = 20;
+            }
+
         }
 
         private void FCMButton_Click(object sender, EventArgs e)
@@ -392,14 +397,14 @@ namespace K_Mean_FCM
 
                     foreach (var point in points)
                     {
-                        affiliationSum += Math.Round(Math.Pow(point.Affiliation[j],fuzziness),9);
+                        affiliationSum += Math.Round(Math.Pow(point.Affiliation[j], fuzziness), 9);
                     }
 
                     double newCenterX = 0;
 
                     foreach (var point in points)
                     {
-                        newCenterX += Math.Round(point.X * Math.Pow(point.Affiliation[j], fuzziness),9);
+                        newCenterX += Math.Round(point.X * Math.Pow(point.Affiliation[j], fuzziness), 9);
                     }
 
                     newCenterX = newCenterX / affiliationSum;
@@ -408,7 +413,7 @@ namespace K_Mean_FCM
 
                     foreach (var point in points)
                     {
-                        newCenterY += Math.Round(point.Y * Math.Pow(point.Affiliation[j], fuzziness),9);
+                        newCenterY += Math.Round(point.Y * Math.Pow(point.Affiliation[j], fuzziness), 9);
                     }
 
                     newCenterY = newCenterY / affiliationSum;
@@ -444,6 +449,11 @@ namespace K_Mean_FCM
             foreach (var groupCenter in groupCenters)
             {
                 wykres_punkty_rysuj(new List<double>() { groupCenter.X }, new List<double>() { groupCenter.Y });
+            }
+
+            for (int i = MainChart.Series.Count / 2; i < MainChart.Series.Count; i++)
+            {
+                MainChart.Series[i].MarkerSize = 20;
             }
         }
 
