@@ -1,1 +1,0 @@
-# Systemy-Sztucznej-Inteligencji-UWM

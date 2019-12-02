@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,6 +91,18 @@ namespace Odczyt_Probek
                     }
                 }
             });
+
+            //ZMIANA
+            for (int i=0;i<values.Count;i++)
+            {
+                for (int j=0;j<values[i].Count;j++)
+                {
+                    if (!areSymbols[j])
+                    {
+                        values[i][j] = (double.Parse(values[i][j], CultureInfo.InvariantCulture) + i).ToString();
+                    }
+                }
+            }
 
             DataTable data = new DataTable();
 

@@ -79,7 +79,22 @@ namespace EvolutionStrategies
 
             var randomSeed = new Random();
 
-            double x = GetRandomDecimalFromScale(minNumber, maxNumber, randomSeed);
+            //double x = GetRandomDecimalFromScale(minNumber, maxNumber, randomSeed);
+            //ZMIANA
+            double worstF = double.MaxValue;
+            double x = -1;
+
+            for(double i=0;i<110;i+=10)
+            {
+                var f = Math.Sin(i / 10) * Math.Sin(i / 200);
+
+                if (worstF > f)
+                {
+                    worstF = f;
+                    x = i;
+                }
+            }
+
 
             double y = double.MinValue;
 

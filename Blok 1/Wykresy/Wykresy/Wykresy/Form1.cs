@@ -239,5 +239,35 @@ namespace Wykresy
                 wykres_punkty_rysuj(x, y);
             }
         }
+
+        //ZMIANA
+        private void button1_Click(object sender, EventArgs e)
+        {
+            wykres_czysc();
+
+            MainChart.ChartAreas.Add("chart");
+
+            NarysujKolo();
+
+            MainChart.ChartAreas[0].AxisX.Minimum = -1;
+            MainChart.ChartAreas[0].AxisX.Maximum = 1;
+            MainChart.ChartAreas[0].AxisY.Minimum = -1;
+            MainChart.ChartAreas[0].AxisY.Maximum = 1;
+        }
+
+        private void NarysujKolo()
+        {
+            var xPoints = new List<double>();
+
+            var yPoints = new List<double>();
+
+            for (double i = 0; i < 17; i++)
+            {
+                xPoints.Add(Math.Sin(Math.PI * (i / 8)));
+                yPoints.Add(Math.Sin(Math.PI * (i + 4) / 8));
+            }
+
+            wykres_linie_rysuj(xPoints, yPoints);
+        }
     }
 }

@@ -121,6 +121,7 @@ namespace Wykresy
             this.IrysDescriptionButton = new System.Windows.Forms.Button();
             this.IrysDataButton = new System.Windows.Forms.Button();
             this.IrysLoadButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MainChart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -181,11 +182,22 @@ namespace Wykresy
             this.IrysLoadButton.UseVisualStyleBackColor = true;
             this.IrysLoadButton.Click += new System.EventHandler(this.IrysLoadButton_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(386, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(349, 65);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1154, 634);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.IrysLoadButton);
             this.Controls.Add(this.IrysDataButton);
             this.Controls.Add(this.IrysDescriptionButton);
@@ -205,6 +217,7 @@ namespace Wykresy
         private System.Windows.Forms.Button IrysDescriptionButton;
         private Button IrysDataButton;
         private Button IrysLoadButton;
+        private Button button1;
     }
 }
 

@@ -237,6 +237,28 @@ namespace K_Mean_FCM
                     newGroups.Add(newCenterPoint, new List<DoublePoint>());
                 }
 
+                //ZMIANA
+                double minimalCountGroup = double.MaxValue;
+                double maximalCountGroup = double.MinValue;
+
+                foreach (var group in groups)
+                {
+                    if (group.Value.Count < minimalCountGroup)
+                    {
+                        minimalCountGroup = group.Value.Count;
+                    }
+
+                    if (group.Value.Count > maximalCountGroup)
+                    {
+                        maximalCountGroup = group.Value.Count;
+                    }
+                }
+
+                if (1.1 * minimalCountGroup > maximalCountGroup)
+                {
+                    break;
+                }
+
                 if (i == iterationsCount - 1)
                 {
                     break;
@@ -378,14 +400,30 @@ namespace K_Mean_FCM
 
                     foreach (var destination in destinations)
                     {
-                        if (destination == 0)
-                        {
-                            point.Affiliation.Add(0);
-                        }
-                        else
-                        {
-                            point.Affiliation.Add(Math.Pow(destination, 1 - fuzziness) / sumOfAffiliation);
-                        }
+                        //ZMIANA
+                        var affiliation = rand.NextDouble();
+
+                        point.Affiliation.Add(affiliation);
+                        //if (destination == 0)
+                        //{
+                        //    point.Affiliation.Add(0);
+                        //}
+                        //else
+                        //{
+                        //    point.Affiliation.Add(Math.Pow(destination, 1 - fuzziness) / sumOfAffiliation);
+                        //}
+                    }
+
+                    double affSum = 0;
+
+                    for (int a=0;a<point.Affiliation.Count;a++)
+                    {
+                        affSum += point.Affiliation[a];
+                    }
+
+                    for (int a = 0; a < point.Affiliation.Count; a++)
+                    {
+                        point.Affiliation[a] /= affSum;
                     }
                 }
 

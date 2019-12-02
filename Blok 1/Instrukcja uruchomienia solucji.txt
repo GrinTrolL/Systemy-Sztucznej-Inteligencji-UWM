@@ -1,0 +1,11 @@
+Konkretne aplikacje korzystaj¹ z bibliotek zbudowanych w trybie release, które s¹ w innych solucjach. Nale¿y zbudowaæ wszystkie 4 solucje w trybie Release w nastêpuj¹cej kolejnoœci:
+
+1. Wczytywanie próbek
+2. Wykresy
+3. K-œrednie
+4. 1+1
+
+Jeœli któraœ z powy¿szych solucji nie chce siê zbuildowaæ, to mo¿e to byæ spowodowane brakiem referencji wy¿ej wymienionych bibliotek:
+
+a) Jeœli brakuje referencji do klasy FileExtensionMethods to nale¿y dodaæ do projektu referencjê do .dll znajduj¹cego siê pod œcie¿k¹ Odczyt próbek\Odczyt_Probek\LoadFileMethods\bin\Release
+b) Jeœli brakuje referencji do klasy ChartExtensionMethods to nale¿y dodaæ do projektu referencjê do .dll znajduj¹cego siê pod œcie¿k¹ Wykresy\Wykresy\ChartExtensionMethods\bin\Release
