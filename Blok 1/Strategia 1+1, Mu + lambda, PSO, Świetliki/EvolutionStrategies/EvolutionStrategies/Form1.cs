@@ -84,7 +84,7 @@ namespace EvolutionStrategies
             double worstF = double.MaxValue;
             double x = -1;
 
-            for(double i=0;i<110;i+=10)
+            for (double i = 0; i < 110; i += 10)
             {
                 var f = Math.Sin(i / 10) * Math.Sin(i / 200);
 
@@ -256,6 +256,13 @@ namespace EvolutionStrategies
                 }
 
                 children = new List<DoublePoint>();
+                //ZMIANA
+                List<int> secondBestChampion = new List<int>();
+
+                for (int j = 0; j < lambda / 10; j++)
+                {
+                    secondBestChampion.Add(seed.Next(0, lambda));
+                }
 
                 for (int j = 0; j < lambda; j++)
                 {
@@ -281,25 +288,62 @@ namespace EvolutionStrategies
                     {
                         chosenFamilyMembers.Add(family[index]);
                     }
-
-                    int indexOfChampion = -1;
-
-                    double fValue = double.MinValue;
-
-                    for (int k = 0; k < chosenFamilyMembers.Count; k++)
+                    //ZMIANA
+                    if (!secondBestChampion.Contains(j))
                     {
-                        if (chosenFamilyMembers[k].FunctionValue > fValue)
+                        int indexOfChampion = -1;
+
+                        double fValue = double.MinValue;
+
+                        for (int k = 0; k < chosenFamilyMembers.Count; k++)
                         {
-                            indexOfChampion = k;
-                            fValue = chosenFamilyMembers[k].FunctionValue;
+                            if (chosenFamilyMembers[k].FunctionValue > fValue)
+                            {
+                                indexOfChampion = k;
+                                fValue = chosenFamilyMembers[k].FunctionValue;
+                            }
                         }
+
+                        var champion = new DoublePoint(chosenFamilyMembers[indexOfChampion].X, chosenFamilyMembers[indexOfChampion].Y);
+
+                        champion.Mutate(GetRandomDecimalFromScale(-mutationLevel, mutationLevel, seed), GetRandomDecimalFromScale(-mutationLevel, mutationLevel, seed));
+
+                        children.Add(champion);
                     }
+                    else
+                    {
+                        int indexOfChampion = -1;
+                        int indexOfSecondChampion = -1;
 
-                    var champion = new DoublePoint(chosenFamilyMembers[indexOfChampion].X, chosenFamilyMembers[indexOfChampion].Y);
+                        double fValue = double.MinValue;
+                        double fSecondValue = double.MinValue;
 
-                    champion.Mutate(GetRandomDecimalFromScale(-mutationLevel, mutationLevel, seed), GetRandomDecimalFromScale(-mutationLevel, mutationLevel, seed));
+                        for (int k = 0; k < chosenFamilyMembers.Count; k++)
+                        {
+                            if (chosenFamilyMembers[k].FunctionValue > fValue)
+                            {
+                                fSecondValue = fValue;
+                                indexOfSecondChampion = indexOfChampion;
 
-                    children.Add(champion);
+                                indexOfChampion = k;
+                                fValue = chosenFamilyMembers[k].FunctionValue;
+                            }
+                            else
+                            {
+                                if (chosenFamilyMembers[k].FunctionValue > fSecondValue)
+                                {
+                                    indexOfSecondChampion = k;
+                                    fSecondValue = chosenFamilyMembers[k].FunctionValue;
+                                }
+                            }
+                        }
+
+                        var champion = new DoublePoint(chosenFamilyMembers[indexOfSecondChampion].X, chosenFamilyMembers[indexOfSecondChampion].Y);
+
+                        champion.Mutate(GetRandomDecimalFromScale(-mutationLevel, mutationLevel, seed), GetRandomDecimalFromScale(-mutationLevel, mutationLevel, seed));
+
+                        children.Add(champion);
+                    }
                 }
 
                 foreach (var member in children)
@@ -512,7 +556,11 @@ namespace EvolutionStrategies
                     {
                         var rndGlob = seed.NextDouble();
                         var rndLocal = seed.NextDouble();
-
+                        //ZMIANA
+                        if (j == maxIndex)
+                        {
+                            populationsPulls[k][j] = 0;
+                        }
 
                         var newPullValue = populationsPulls[k][j] * inertiaValue +
                                               (globalBest.GetAttribute(k) - population[j].GetAttribute(k)) * globalPull * rndGlob +
