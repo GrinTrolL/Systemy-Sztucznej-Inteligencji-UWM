@@ -9,22 +9,23 @@ namespace HopfieldaSiec
     static public class HopfieldaSiecAlgorytm
     {
         static public List<List<double>> wagi = new List<List<double>>();
-        static public List<bool[,]> neurons = new List<bool[,]>();
+        static public int[,] paletka;
 
         /// <summary>
         /// Uruchamiane tylko raz przy starcie programu
         /// </summary>
         /// <param name="szerokosc"></param>
         /// <param name="wysokosc"></param>
-        static public void inicjuj(int szerokosc, int wysokosc)        
+        static public void inicjuj(int szerokosc, int wysokosc)
         {
+            paletka = new int[szerokosc, wysokosc];
             int neuronsNumber = szerokosc * wysokosc;
 
-            for (int i=0;i<neuronsNumber;i++)
+            for (int i = 0; i < neuronsNumber; i++)
             {
                 var list = new List<double>();
 
-                for (int j=0;j<neuronsNumber;j++)
+                for (int j = 0; j < neuronsNumber; j++)
                 {
                     list.Add(0);
                 }
@@ -32,46 +33,95 @@ namespace HopfieldaSiec
                 wagi.Add(list);
             }
         }
+
         static public void nauczObraz(bool[,] obraz)
         {
-            for (int i = 0; i < obraz.GetLength(0);i++)
+            for (int i = 0; i < obraz.GetLength(0); i++)
             {
-                for (int j=0; j < obraz.GetLength(1);j++)
+                for (int j = 0; j < obraz.GetLength(1); j++)
                 {
                     var index = i * obraz.GetLength(0) + j;
 
-                    var wages = wagi[index];
-
-                    var sum = 0;
-                    var value = 0;
-
-
-                    for (int k=0;k<obraz.GetLength(0)*obraz.GetLength(1);k++)
+                    if (obraz[i, j])
                     {
-                        if (index == k)
-                            continue;
-
-                        sum+=wages[k]*
-                    }
-
-                    if (sum >= 0)
-                    {
-                        value = 1;
+                        paletka[i, j] = 1;
                     }
                     else
                     {
-                        value = -1;
+                        paletka[i, j] = -1;
+                    }
+
+                    for (int a = 0; a < obraz.GetLength(0); a++)
+                    {
+                        for (int b = 0; b < obraz.GetLength(1); b++)
+                        {
+                            if (i == a && j == b)
+                                continue;
+
+                            var secondIndex = a * obraz.GetLength(0) + b;
+
+                            double first = obraz.GetLength(0) * obraz.GetLength(1);
+
+                            double second = 1.0 / first;
+
+                            double third = second * paletka[i, j];
+
+                            double fourth = third * paletka[a, b];
+
+                            wagi[index][secondIndex] += fourth;
+                        }
                     }
                 }
             }
         }
 
         static public bool rozpoznajObraz(ref bool[,] obraz)
-        {  // należy naprawić (rozpoznać) podany obraz
-            // ... 
-            // zwróc false jeśli nie zmieniono obrazu
-            return false; 
+        {
+            for (int i = 0; i < obraz.GetLength(0); i++)
+            {
+                for (int j = 0; j < obraz.GetLength(1); j++)
+                {
+                    var index = i * obraz.GetLength(0) + j;
+
+                    if (obraz[i, j])
+                    {
+                        paletka[i, j] = 1;
+                    }
+                    else
+                    {
+                        paletka[i, j] = -1;
+                    }
+
+                    double sum = 0;
+
+                    for (int a = 0; a < obraz.GetLength(0); a++)
+                    {
+                        for (int b = 0; b < obraz.GetLength(1); b++)
+                        {
+                            if (i == a && j == b)
+                                continue;
+
+                            var secondIndex = a * obraz.GetLength(0) + b;
+
+                            double first = paletka[a, b] * wagi[index][secondIndex];
+
+                            sum += first;
+                        }
+                    }
+
+                    if (sum >= 0)
+                    {
+                        obraz[i, j] = true;
+                    }
+                    else
+                    {
+                        obraz[i, j] = false;
+                    }
+                }
+            }
+
+            return true;
         }
- 
+
     }
 }
