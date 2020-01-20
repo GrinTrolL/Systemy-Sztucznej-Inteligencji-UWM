@@ -221,11 +221,27 @@ namespace SterownikRozmyty
 
             if (group.Contains(value))
             {
-                foreach (var element in group)
-                {
-                    activation += (element - value) * (element - value);
-                }
+                //foreach (var element in group)
+                //{
+                //    activation += (element - value) * (element - value);
+                //}
+
+                double licznik = value - group[group.Count / 2];
+
+                double mianownik = (group[0] - group[group.Count - 1]) * 0.4;
+
+                double iloraz = licznik / mianownik;
+
+                iloraz *= iloraz;
+
+                activation += Math.Exp(-iloraz);
             }
+
+            //var sum = 0;
+            
+            //group.ForEach(elem => sum += elem * elem);
+
+            //activation /= sum;
 
             return activation;
         }
