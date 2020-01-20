@@ -42,14 +42,7 @@ namespace HopfieldaSiec
                 {
                     var index = i * obraz.GetLength(0) + j;
 
-                    if (obraz[i, j])
-                    {
-                        paletka[i, j] = 1;
-                    }
-                    else
-                    {
-                        paletka[i, j] = -1;
-                    }
+                    double sum = 0;
 
                     for (int a = 0; a < obraz.GetLength(0); a++)
                     {
@@ -60,15 +53,43 @@ namespace HopfieldaSiec
 
                             var secondIndex = a * obraz.GetLength(0) + b;
 
-                            double first = obraz.GetLength(0) * obraz.GetLength(1);
+                            double first = paletka[a, b] * wagi[index][secondIndex];
 
-                            double second = 1.0 / first;
+                            sum += first;
+                        }
+                    }
 
-                            double third = second * paletka[i, j];
+                    if (Math.Sign(paletka[i, j]) != Math.Sign(sum))
+                    {
 
-                            double fourth = third * paletka[a, b];
+                        if (obraz[i, j])
+                        {
+                            paletka[i, j] = 1;
+                        }
+                        else
+                        {
+                            paletka[i, j] = -1;
+                        }
 
-                            wagi[index][secondIndex] += fourth;
+                        for (int a = 0; a < obraz.GetLength(0); a++)
+                        {
+                            for (int b = 0; b < obraz.GetLength(1); b++)
+                            {
+                                if (i == a && j == b)
+                                    continue;
+
+                                var secondIndex = a * obraz.GetLength(0) + b;
+
+                                double first = obraz.GetLength(0) * obraz.GetLength(1);
+
+                                double second = 1.0 / first;
+
+                                double third = second * paletka[i, j];
+
+                                double fourth = third * paletka[a, b];
+
+                                wagi[index][secondIndex] += fourth;
+                            }
                         }
                     }
                 }

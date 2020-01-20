@@ -29,9 +29,9 @@ namespace GreedyPoint_Nazwisko_Imie
                 marks.Add(mark);
             }
 
-            for (int i=0;i<marks.Count;i++)
+            for (int i = 0; i < marks.Count; i++)
             {
-                for (int j=i+1;j<marks.Count;j++)
+                for (int j = i + 1; j < marks.Count; j++)
                 {
                     if (marks[i] == marks[j] && marks.IndexOf(marks.Max()) == i)
                         return -1;
@@ -58,26 +58,37 @@ namespace GreedyPoint_Nazwisko_Imie
                 {
                     if (testMap[a, b])
                     {
+                        //ZMIANA
                         var distanceMin = double.PositiveInfinity;
 
-                        for (int i = 0; i < bitMap.GetLength(0); i++)
+                        //for (int i = 0; i < bitMap.GetLength(0); i++)
+                        //{
+                        bool noBits = true;
+
+                        for (int j = 0; j < bitMap.GetLength(1); j++)
                         {
-                            for (int j = 0; j < bitMap.GetLength(1); j++)
+
+                            if (bitMap[a, j])
                             {
-                                if (bitMap[i, j])
+                                noBits = false;
+
+                                var xDistance = a - a;
+                                var yDistance = b - j;
+
+                                var distance = Math.Sqrt((xDistance * xDistance) + (yDistance * yDistance));
+
+                                if (distance < distanceMin)
                                 {
-                                    var xDistance = a - i;
-                                    var yDistance = b - j;
-
-                                    var distance = Math.Sqrt((xDistance * xDistance) + (yDistance * yDistance));
-
-                                    if (distance < distanceMin)
-                                    {
-                                        distanceMin = distance;
-                                    }
+                                    distanceMin = distance;
                                 }
                             }
                         }
+                        
+                        if (noBits)
+                        {
+                            distanceMin = 13;
+                        }
+                        //}
 
                         mark += distanceMin;
                     }
